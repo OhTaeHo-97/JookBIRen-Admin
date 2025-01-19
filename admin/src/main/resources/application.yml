@@ -1,1 +1,6 @@
-spring.application.name=admin
+naver-cloud:
+  accessKey: ${NAVER_CLOUD_ACCESS_KEY}
+  secretKey: ${NAVER_CLOUD_SECRET_KEY}
+  serviceId: ${NAVER_CLOUD_SERVICE_ID}
+  senderPhone: ${SENDER_PHONE_NUMBER}
+  algorithm: ${ENCODING_ALGORITHM}

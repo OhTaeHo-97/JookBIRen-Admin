@@ -66,6 +66,9 @@ dependencies {
 
     // commons-io
     implementation 'commons-io:commons-io:2.6'
+
+    // okHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
 }
 
 dependencyManagement {
