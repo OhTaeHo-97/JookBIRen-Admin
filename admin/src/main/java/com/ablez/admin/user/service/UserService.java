@@ -1,5 +1,7 @@
 package com.ablez.admin.user.service;
 
+import com.ablez.admin.sms.dto.SmsDto.SmsSendDto;
+import com.ablez.admin.sms.service.SmsService;
 import com.ablez.admin.user.entity.UserEp00;
 import com.ablez.admin.user.entity.UserEp01;
 import com.ablez.admin.user.entity.UserEp02;
@@ -10,6 +12,9 @@ import com.ablez.admin.user.repository.UserEp00Repository;
 import com.ablez.admin.user.repository.UserEp01Repository;
 import com.ablez.admin.user.repository.UserEp02Repository;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +43,7 @@ public class UserService {
     private final UserEp00Repository userEp00Repository;
     private final UserEp00JpaRepository userEp00JpaRepository;
     private final UserInfoService userInfoService;
+    private final SmsService smsService;
 
     public Workbook registerCodesInEp0(int count) {
         Workbook workbook = new XSSFWorkbook();
@@ -79,6 +85,7 @@ public class UserService {
             for (int rowIdx = 0; rowIdx < worksheet.getPhysicalNumberOfRows(); rowIdx++) {
                 Row row = worksheet.getRow(rowIdx);
                 if (row != null) {
+                    List<String> codes = new ArrayList<>();
                     List<String> infos = processExcelData(row);
                     if (infos.isEmpty()) {
                         return;
@@ -88,8 +95,15 @@ public class UserService {
                     int amount = Integer.parseInt(infos.get(1));
                     int episode = Integer.parseInt(infos.get(2));
                     for (int count = 0; count < amount; count++) {
-                        makeUser(episode, phone);
+                        makeUser(episode, phone, codes);
                     }
+
+                    // SMS 전송
+                    String content = "";
+                    for (String code : codes) {
+                        content += code + "\n";
+                    }
+                    smsService.sendMessage("코드 생성 완료했습니다. 코드는 다음과 같습니다.\n" + content, new SmsSendDto(phone));
                 }
             }
             workbook.close();
@@ -97,19 +111,26 @@ public class UserService {
             throw new RuntimeException("엑셀 파일을 읽는 중 오류가 발생했습니다.");
         } catch (NumberFormatException e) {
             throw new RuntimeException("엑셀 파일의 데이터를 처리하는 중 오류가 발생했습니다.");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SMS 전송 중 오류가 발생했습니다.");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("SMS 전송 중 오류가 발생했습니다.");
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException("SMS 전송 중 오류가 발생했습니다.");
         }
     }
 
-    private void makeUser(int episode, String phone) {
+    private void makeUser(int episode, String phone, List<String> codes) {
         if (episode == 1) {
             UserInfoEp01 userInfo = userInfoService.makeUserInfoEp01(phone);
             UserEp01 user = new UserEp01(userInfo.getCode(), userInfo);
             userEp01Repository.save(user);
-
+            codes.add(userInfo.getCode());
         } else if (episode == 2) {
             UserInfoEp02 userInfo = userInfoService.makeUserInfoEp02(phone);
             UserEp02 user = new UserEp02(userInfo.getCode(), userInfo);
             userEp02Repository.save(user);
+            codes.add(userInfo.getCode());
         }
     }
 
