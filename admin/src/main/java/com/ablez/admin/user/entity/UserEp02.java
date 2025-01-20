@@ -58,4 +58,18 @@ public class UserEp02 {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AuthorityEp02> authorities = new HashSet<>();
+
+    public UserEp02(String code) {
+        this.code = code;
+    }
+
+    public UserEp02(String code, UserInfoEp02 userInfo) {
+        this.code = code;
+        this.userInfo = userInfo;
+        userInfo.setUser(this);
+    }
+
+    public void addAuthority(AuthorityEp02 authority) {
+        this.authorities.add(authority);
+    }
 }

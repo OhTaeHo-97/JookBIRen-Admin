@@ -13,8 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/ep0")
+    @GetMapping("/chatbot")
     public ResponseEntity registerCodesInEp0(@Positive Integer count, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition",
@@ -33,6 +36,12 @@ public class UserController {
         workbook.write(response.getOutputStream());
         workbook.close();
 
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/web")
+    public ResponseEntity registerCodesInJookBiRen(@RequestParam("file") MultipartFile file) throws IOException {
+        userService.registerCodesInJookBiRen(file);
         return new ResponseEntity(HttpStatus.OK);
     }
 

@@ -26,4 +26,9 @@ public class UserInfoEp02 {
     @OneToOne(mappedBy = "userInfo", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Setter
     private UserEp02 user;
+
+    public UserInfoEp02(String code, String phone) {
+        this.code = code;
+        this.phone = phone;
+    }
 }
