@@ -1,5 +1,13 @@
 package com.ablez.admin.user.service;
 
+import static com.ablez.admin.utils.SmsConstants.SMS_CHATBOT_MESSAGE;
+import static com.ablez.admin.utils.SmsConstants.SMS_EPISODE1_MESSAGE_SPRING;
+import static com.ablez.admin.utils.SmsConstants.SMS_EPISODE1_MESSAGE_SUMMER;
+import static com.ablez.admin.utils.SmsConstants.SMS_EPISODE1_MESSAGE_WINTER;
+import static com.ablez.admin.utils.SmsConstants.SMS_EPISODE2_MESSAGE_SPRING;
+import static com.ablez.admin.utils.SmsConstants.SMS_EPISODE2_MESSAGE_SUMMER;
+import static com.ablez.admin.utils.SmsConstants.SMS_EPISODE2_MESSAGE_WINTER;
+
 import com.ablez.admin.sms.dto.SmsDto.SmsSendDto;
 import com.ablez.admin.sms.service.SmsService;
 import com.ablez.admin.user.entity.UserEp00;
@@ -11,10 +19,13 @@ import com.ablez.admin.user.repository.UserEp00JpaRepository;
 import com.ablez.admin.user.repository.UserEp00Repository;
 import com.ablez.admin.user.repository.UserEp01Repository;
 import com.ablez.admin.user.repository.UserEp02Repository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -99,11 +110,12 @@ public class UserService {
                     }
 
                     // SMS 전송
-                    String content = "";
-                    for (String code : codes) {
-                        content += code + "\n";
+                    String content = codes.get(0);
+                    for (int idx = 1; idx < codes.size(); idx++) {
+                        content += ", " + codes.get(idx);
                     }
-                    smsService.sendMessage("코드 생성 완료했습니다. 코드는 다음과 같습니다.\n" + content, new SmsSendDto(phone));
+//                    smsService.sendMessage("코드 생성 완료했습니다. 코드는 다음과 같습니다.\n" + content, new SmsSendDto(phone));
+                    sendMessage(episode, content, phone);
                 }
             }
             workbook.close();
@@ -118,6 +130,37 @@ public class UserService {
         } catch (InvalidKeyException e) {
             throw new RuntimeException("SMS 전송 중 오류가 발생했습니다.");
         }
+    }
+
+    private void sendMessage(int episode, String codes, String phone)
+            throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException {
+        int month = findCurrentMonth();
+        if (episode == 0) {
+            smsService.sendMessage(String.format(SMS_CHATBOT_MESSAGE, "link", codes), new SmsSendDto(phone));
+        } else if (episode == 1) {
+            if (month >= 11 || month <= 3) {
+                smsService.sendMessage(String.format(SMS_EPISODE1_MESSAGE_WINTER, codes), new SmsSendDto(phone));
+            } else if (month >= 6 && month <= 8) {
+                smsService.sendMessage(String.format(SMS_EPISODE1_MESSAGE_SUMMER, codes), new SmsSendDto(phone));
+            } else {
+                smsService.sendMessage(String.format(SMS_EPISODE1_MESSAGE_SPRING, codes), new SmsSendDto(phone));
+            }
+        } else if (episode == 2) {
+            if (month >= 11 || month <= 3) {
+                smsService.sendMessage(String.format(SMS_EPISODE2_MESSAGE_WINTER, codes), new SmsSendDto(phone));
+            } else if (month >= 6 && month <= 8) {
+                smsService.sendMessage(String.format(SMS_EPISODE2_MESSAGE_SUMMER, codes), new SmsSendDto(phone));
+            } else {
+                smsService.sendMessage(String.format(SMS_EPISODE2_MESSAGE_SPRING, codes), new SmsSendDto(phone));
+            }
+        }
+//        smsService.sendMessage(String.format(SMS_CHATBOT_MESSAGE, "link", codes), new SmsSendDto(phone));
+//        smsService.sendMessage("코드 생성 완료했습니다. 코드는 다음과 같습니다.\n" + codes, new SmsSendDto(phone));
+    }
+
+    private int findCurrentMonth() {
+        LocalDateTime now = LocalDateTime.now();
+        return now.getMonthValue();
     }
 
     private void makeUser(int episode, String phone, List<String> codes) {

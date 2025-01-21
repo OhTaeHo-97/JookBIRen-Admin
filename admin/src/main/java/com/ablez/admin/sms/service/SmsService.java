@@ -51,7 +51,7 @@ public class SmsService {
 
         // SMS 전송 관련 객체 생성(API 요청에 필요한 데이터 생성)
         SmsRequestDto requestDto = SmsRequestDto.builder()
-                .type("SMS")
+                .type("LMS")
                 .contentType("COMM")
                 .countryCode("82")
                 .from(fromPhone)
