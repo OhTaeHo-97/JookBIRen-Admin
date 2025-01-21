@@ -1,6 +1,5 @@
 package com.ablez.admin.user.service;
 
-import static com.ablez.admin.utils.SmsConstants.SMS_CHATBOT_MESSAGE;
 import static com.ablez.admin.utils.SmsConstants.SMS_EPISODE1_MESSAGE_SPRING;
 import static com.ablez.admin.utils.SmsConstants.SMS_EPISODE1_MESSAGE_SUMMER;
 import static com.ablez.admin.utils.SmsConstants.SMS_EPISODE1_MESSAGE_WINTER;
@@ -110,9 +109,9 @@ public class UserService {
                     }
 
                     // SMS 전송
-                    String content = codes.get(0);
-                    for (int idx = 1; idx < codes.size(); idx++) {
-                        content += ", " + codes.get(idx);
+                    String content = "";
+                    for (String code : codes) {
+                        content += code + "\n";
                     }
 //                    smsService.sendMessage("코드 생성 완료했습니다. 코드는 다음과 같습니다.\n" + content, new SmsSendDto(phone));
                     sendMessage(episode, content, phone);
@@ -135,9 +134,7 @@ public class UserService {
     private void sendMessage(int episode, String codes, String phone)
             throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException {
         int month = findCurrentMonth();
-        if (episode == 0) {
-            smsService.sendMessage(String.format(SMS_CHATBOT_MESSAGE, "link", codes), new SmsSendDto(phone));
-        } else if (episode == 1) {
+        if (episode == 1) {
             if (month >= 11 || month <= 3) {
                 smsService.sendMessage(String.format(SMS_EPISODE1_MESSAGE_WINTER, codes), new SmsSendDto(phone));
             } else if (month >= 6 && month <= 8) {
