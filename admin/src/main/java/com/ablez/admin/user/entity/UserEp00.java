@@ -28,7 +28,7 @@ public class UserEp00 {
     private Boolean isBanned = false;
     @Setter
     @ColumnDefault("0")
-    private Integer custom;
+    private Integer custom = 0;
 
     public UserEp00(String code) {
         this.code = code;
