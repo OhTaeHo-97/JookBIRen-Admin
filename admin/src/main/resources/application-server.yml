@@ -31,6 +31,7 @@ server:
   servlet:
     encoding:
       force-response: true
+  port: 8081
 
 aws:
   accessKeyId: ${AWS_ACCESS_KEY_ID}
