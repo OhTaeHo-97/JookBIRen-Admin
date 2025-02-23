@@ -2,18 +2,18 @@ package com.ablez.admin.first_db.quiz.service;
 
 import com.ablez.admin.first_db.quiz.dto.QuizDto.QuizInfoDto;
 import com.ablez.admin.first_db.quiz.dto.QuizDto.WrongAnswerDto;
-import com.ablez.admin.first_db.quiz.repository.episode1.Ep1Quiz0Repository;
-import com.ablez.admin.first_db.quiz.repository.episode1.Ep1Quiz1Repository;
-import com.ablez.admin.first_db.quiz.repository.episode1.Ep1Quiz4Repository;
-import com.ablez.admin.first_db.quiz.repository.episode1.Ep1WrongAnswerRepository;
 import com.ablez.admin.first_db.quiz.entity.episode1.Quiz0Ep01;
 import com.ablez.admin.first_db.quiz.entity.episode1.Quiz1Ep01;
 import com.ablez.admin.first_db.quiz.entity.episode1.Quiz2Ep01;
 import com.ablez.admin.first_db.quiz.entity.episode1.Quiz3Ep01;
 import com.ablez.admin.first_db.quiz.entity.episode1.Quiz4Ep01;
 import com.ablez.admin.first_db.quiz.entity.episode1.WrongAnswerEp01;
+import com.ablez.admin.first_db.quiz.repository.episode1.Ep1Quiz0Repository;
+import com.ablez.admin.first_db.quiz.repository.episode1.Ep1Quiz1Repository;
 import com.ablez.admin.first_db.quiz.repository.episode1.Ep1Quiz2Repository;
 import com.ablez.admin.first_db.quiz.repository.episode1.Ep1Quiz3Repository;
+import com.ablez.admin.first_db.quiz.repository.episode1.Ep1Quiz4Repository;
+import com.ablez.admin.first_db.quiz.repository.episode1.Ep1WrongAnswerRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +47,7 @@ public class Ep01QuizInfoService {
         return quizzes.stream().map(quiz -> QuizInfoDto.builder()
                         .code(quiz.getUserId().getCode())
                         .placeNumber(0)
+                        .quizNumber(quiz.getQuizNumber())
                         .firstAccessTime(quiz.getFirstAccessTime())
                         .firstAnswerTime(quiz.getFirstAnswerTime())
                         .getFirstHintTime(quiz.getFirstHintTime())
@@ -60,7 +61,8 @@ public class Ep01QuizInfoService {
         List<Quiz1Ep01> quizzes = ep1Quiz1Repository.findAll();
         return quizzes.stream().map(quiz -> QuizInfoDto.builder()
                         .code(quiz.getUserId().getCode())
-                        .placeNumber(0)
+                        .placeNumber(1)
+                        .quizNumber(quiz.getQuizNumber())
                         .firstAccessTime(quiz.getFirstAccessTime())
                         .firstAnswerTime(quiz.getFirstAnswerTime())
                         .getFirstHintTime(quiz.getFirstHintTime())
@@ -74,7 +76,8 @@ public class Ep01QuizInfoService {
         List<Quiz2Ep01> quizzes = ep1Quiz2Repository.findAll();
         return quizzes.stream().map(quiz -> QuizInfoDto.builder()
                         .code(quiz.getUserId().getCode())
-                        .placeNumber(0)
+                        .placeNumber(2)
+                        .quizNumber(quiz.getQuizNumber())
                         .firstAccessTime(quiz.getFirstAccessTime())
                         .firstAnswerTime(quiz.getFirstAnswerTime())
                         .getFirstHintTime(quiz.getFirstHintTime())
@@ -88,7 +91,8 @@ public class Ep01QuizInfoService {
         List<Quiz3Ep01> quizzes = ep1Quiz3Repository.findAll();
         return quizzes.stream().map(quiz -> QuizInfoDto.builder()
                         .code(quiz.getUserId().getCode())
-                        .placeNumber(0)
+                        .placeNumber(3)
+                        .quizNumber(quiz.getQuizNumber())
                         .firstAccessTime(quiz.getFirstAccessTime())
                         .firstAnswerTime(quiz.getFirstAnswerTime())
                         .getFirstHintTime(quiz.getFirstHintTime())
@@ -102,7 +106,8 @@ public class Ep01QuizInfoService {
         List<Quiz4Ep01> quizzes = ep1Quiz4Repository.findAll();
         return quizzes.stream().map(quiz -> QuizInfoDto.builder()
                         .code(quiz.getUserId().getCode())
-                        .placeNumber(0)
+                        .placeNumber(4)
+                        .quizNumber(quiz.getQuizNumber())
                         .firstAccessTime(quiz.getFirstAccessTime())
                         .firstAnswerTime(quiz.getFirstAnswerTime())
                         .getFirstHintTime(quiz.getGetHintTime())

@@ -24,7 +24,7 @@ public class UserEp02Repository extends FirstQuerydsl4RepositorySupport {
     }
 
     public List<UserEp02> findAll() {
-        return select(userEp02)
+        return selectFrom(userEp02)
                 .fetch();
     }
 }

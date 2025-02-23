@@ -1,5 +1,10 @@
 package com.ablez.admin.first_db.user.service;
 
+import static com.ablez.admin.first_db.utils.AnswerConstants.EP01_SUSPECT;
+import static com.ablez.admin.first_db.utils.AnswerConstants.EP02_SUSPECT1;
+import static com.ablez.admin.first_db.utils.AnswerConstants.EP02_SUSPECT2;
+import static com.ablez.admin.first_db.utils.AnswerConstants.EP03_SUSPECT;
+
 import com.ablez.admin.first_db.security.entity.Authority;
 import com.ablez.admin.first_db.user.entity.UserEp00;
 import com.ablez.admin.first_db.user.entity.UserEp01;
@@ -13,6 +18,8 @@ import com.ablez.admin.first_db.user.repository.UserEp02JpaRepository;
 import com.ablez.admin.first_db.user.repository.UserEp02Repository;
 import com.ablez.admin.first_db.user.repository.UserEp03Repository;
 import com.ablez.admin.first_db.user.repository.UserInfoJpaRepository;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -163,9 +170,9 @@ public class UserService {
             row.createCell(0).setCellValue(user.getCode());
             row.createCell(1).setCellValue(1);
             row.createCell(2).setCellValue("");
-            row.createCell(3).setCellValue(user.getAnswerTime());
-            row.createCell(4).setCellValue(user.getCriminal());
-            row.createCell(5).setCellValue(user.getFirstLoginTime());
+            row.createCell(3).setCellValue(parseLocalDateTime(user.getAnswerTime()));
+            row.createCell(4).setCellValue(EP01_SUSPECT.get(user.getCriminal()));
+            row.createCell(5).setCellValue(parseLocalDateTime(user.getFirstLoginTime()));
             row.createCell(6).setCellValue(user.getSolvedQuizCount());
             row.createCell(7).setCellValue(user.getScore());
         }
@@ -196,10 +203,10 @@ public class UserService {
             row.createCell(0).setCellValue(user.getCode());
             row.createCell(1).setCellValue(2);
             row.createCell(2).setCellValue("");
-            row.createCell(3).setCellValue(user.getAnswerTime());
-            row.createCell(4).setCellValue(user.getCriminal1());
-            row.createCell(5).setCellValue(user.getCriminal2());
-            row.createCell(6).setCellValue(user.getFirstLoginTime());
+            row.createCell(3).setCellValue(parseLocalDateTime(user.getAnswerTime()));
+            row.createCell(4).setCellValue(EP02_SUSPECT1.get(user.getCriminal1()));
+            row.createCell(5).setCellValue(EP02_SUSPECT2.get(user.getCriminal2()));
+            row.createCell(6).setCellValue(parseLocalDateTime(user.getFirstLoginTime()));
             row.createCell(7).setCellValue(user.getSolvedQuizCount());
             row.createCell(8).setCellValue(user.getScore());
         }
@@ -211,7 +218,7 @@ public class UserService {
         // 이름, 코드, 전화번호, 플랫폼, 닉네임, 주문번호, 금액, 에피소드, 주소, 생성일
         List<UserEp03> users = userEp03Repository.findAll();
 
-        Sheet sheet = workbook.createSheet("에피소드1 유저 정보");
+        Sheet sheet = workbook.createSheet("에피소드3 유저 정보");
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("코드");
         row.createCell(1).setCellValue("에피소드");
@@ -229,14 +236,21 @@ public class UserService {
             row.createCell(0).setCellValue(user.getCode());
             row.createCell(1).setCellValue(3);
             row.createCell(2).setCellValue("");
-            row.createCell(3).setCellValue(user.getAnswerTime());
-            row.createCell(4).setCellValue(user.getCriminal());
-            row.createCell(5).setCellValue(user.getFirstLoginTime());
+            row.createCell(3).setCellValue(parseLocalDateTime(user.getAnswerTime()));
+            row.createCell(4).setCellValue(EP03_SUSPECT.get(user.getCriminal()));
+            row.createCell(5).setCellValue(parseLocalDateTime(user.getFirstLoginTime()));
             row.createCell(6).setCellValue(user.getSolvedQuizCount());
             row.createCell(7).setCellValue(user.getScore());
         }
 
         return workbook;
+    }
+
+    private String parseLocalDateTime(LocalDateTime time) {
+        if (time == null) {
+            return "";
+        }
+        return time.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
     }
 //    public void registerCodesInJookBiRen(MultipartFile file) throws IOException {
 //        try {
