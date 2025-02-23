@@ -1,9 +1,21 @@
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://${AWS_RDS_ENDPOINT}/episode1?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+#    username: ${MYSQL_ROOT_NAME}
+#    password: ${MYSQL_ROOT_PASSWORD}
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${AWS_RDS_ENDPOINT}/episode1?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-    username: ${MYSQL_ROOT_NAME}
-    password: ${MYSQL_ROOT_PASSWORD}
+    first_db:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://${EC2_MYSQL_ADDRESS}/jookbiren?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+      username: ${MYSQL_ROOT_NAME}
+      password: ${MYSQL_ROOT_PASSWORD}
+    second_db:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://${AWS_RDS_ENDPOINT}/episode1?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+      username: ${SECOND_MYSQL_ROOT_NAME}
+      password: ${SECOND_MYSQL_ROOT_PASSWORD}
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -18,7 +30,7 @@ spring:
     init:
       mode: always
   config:
-    import: aws-parameterstore:/chatbot/jookbiren
+    import: aws-parameterstore:/web/admin
 
 logging:
   level:
