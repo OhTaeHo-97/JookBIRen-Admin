@@ -256,6 +256,10 @@ public class UserService {
     }
 
     private int calculateScoreEp1(UserEp01 user) {
+        if (user.getAnswerTime() == null) {
+            return 0;
+        }
+
         int score = 0;
         if (user.getCriminal() == 2) {
             score += 5;
@@ -287,6 +291,10 @@ public class UserService {
     }
 
     private int calculateScoreEp2(UserEp02 user) {
+        if (user.getAnswerTime() == null) {
+            return 0;
+        }
+
         int score = 0;
         if (user.getCriminal1() == 3) {
             score += 5;
@@ -318,6 +326,10 @@ public class UserService {
     }
 
     private int calculateScoreEp3(UserEp03 user) {
+        if (user.getAnswerTime() == null) {
+            return 0;
+        }
+        
         int score = 0;
         if (user.getCriminal() == 1) {
             score += 5;
