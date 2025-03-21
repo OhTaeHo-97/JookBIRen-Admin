@@ -1,6 +1,6 @@
 package com.ablez.admin.user.repository;
 
-import static com.ablez.admin.first_db.user.entity.QUserEp00.userEp00;
+import static com.ablez.admin.user.entity.QUserEp00.userEp00;
 
 import com.ablez.admin.repository.FirstQuerydsl4RepositorySupport;
 import com.ablez.admin.user.entity.UserEp00;

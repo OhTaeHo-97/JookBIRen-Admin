@@ -1,7 +1,7 @@
 package com.ablez.admin.quiz.repository.episode1;
 
-import static com.ablez.admin.first_db.quiz.entity.episode1.QQuiz4Ep01.quiz4Ep01;
-import static com.ablez.admin.first_db.user.entity.QUserEp01.userEp01;
+import static com.ablez.admin.quiz.entity.episode1.QQuiz4Ep01.quiz4Ep01;
+import static com.ablez.admin.user.entity.QUserEp01.userEp01;
 
 import com.ablez.admin.quiz.entity.episode1.Quiz4Ep01;
 import com.ablez.admin.repository.FirstQuerydsl4RepositorySupport;
